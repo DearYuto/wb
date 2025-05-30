@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+> #### 개발 계획 및 설계 과정
 
-## Getting Started
+**1. 도메인의 확장성(전자상거래 관련)과 추후 복잡성 고려하여 DDD 아키텍처로 설계하기**
 
-First, run the development server:
+현재 도메인인 상품은 주문, 결제, 재고, 프로모션 등 다양한 기능들로 확장될 수 있기 때문에 복잡도가 높은 도메인이 될 수 있고, 이는 도메인의 경계가 넓고 기능이 복잡해질 수 있음을 의미하므로 DDD 아키텍쳐를 적용하기 좋겠다고 판단했습니다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+도메인 모델을 기준으로 분리할 경우, 설계할 때와 개발 시 초기 복잡도가 높아진다는 단점이 있었지만 장기적인 관점에서 확장성과 유지보수성을 위해 감수할만한 트레이드 오프라고 생각했습니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. 요구사항 명확하게 이해하기**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+개발하기 이전 단계에서의 요구사항 분석과 설계는 전체 프로젝트의 품질을 좌우한다고 생각합니다.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+잘못된 요구사항 이해는 잘못된 결과물로 이어지는 연쇄적인 문제가 된다고 생각하여 요구사항을 명확하게 정리하고 체크리스트 형태로 세분화하여 설계 및 개발의 기준점으로 삼았습니다.
 
-## Learn More
+> #### 폴더 구조
 
-To learn more about Next.js, take a look at the following resources:
+> #### 기술 스택
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js
+Typescript
+Radix UI
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> #### 유비쿼터스 언어
 
-## Deploy on Vercel
+- 추가 예정
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> #### 개발중 경험했던 이슈 & 주요 고려사항
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+실무 환경이라 가정하여 함께 협업할 구성원(기획자, 디자이너 등)을 먼저 고려하면서도 개발자 경험이 일관되고 읽기 쉬운 코드를 유지할 수 있고, 최대한 경량화된 라이브러리를 선택하고자 했습니다.
+무엇보다 디자이너의 시안을 기반으로 UI를 구현하는 상황에서는 디자인을 동일하게 재현하는 것이 중요했고
+디자이너가 원하는 디자인을 재현하기 위해서는 디자인 커스텀의 자유도가 높은 라이브러리 선택이 필요했습니다.
+
+Radix UI는 헤드리스 컴포넌트 기반으로 접근성이나 키보드 내비게이션 등 개발에 필요한 핵심 기능이 내장되어 있고 디자인 커스터마이징의 유연성이 뛰어나다는 점에서 디자이너의 의도를 세밀하게 반영할 수 있고 일관된 개발 경험을 유지할 수 있다는 점에서 여러 복합적인 이유로 Radix UI가 적합하다 판단하였습니다.
+
+> #### 기능 요구사항 체크리스트
+
+**상품 생성 페이지**
+
+- [] 상품을 생성할 수 있다.
+- [ ] 상품 생성은 Form을 사용한다.
+- [ ] 유효성 검사를 통과해야 상품 생성을 할 수 있다.
+      Validate 체크 리스트
+  - [ ] 필드명 title은 타입이 text이고 필수 입력이다.
+  - [ ] 필드명 title은 15자 이내로 입력되어야 한다.
+  - [ ] 필드명 description은 타입이 textarea이고 옵셔널이다.
+  - [ ] 필드명 description은 유효성 검사를 하지 않는다.
+  - [ ] 필드명 price는 타입이 number이고 필수 입력이다.
+  - [ ] 필드명 price는 1,000원 이상으로 입력되어야 한다.
+  - [ ] 필드명 discountPercentage는 타입이 number이고 옵셔널이다.
+  - [ ] 필드명 discountPercentage는 100 이내로 입력되어야 한다.
+  - [ ] 필드명 brand는 타입이 select이고, 단 1개만 필수 선택되어야 한다.
+  - [ ] 필드명 brand 옵션박스의 셀렉트 목록은 Apple, Samsung, Weebur이다.
+- [ ] 상품 생성 API는 (https://dummyjson.com/products/add) 를 호출한다.
+- [ ] 상품 생성이 완료되었다면 상품 리스트 페이지(/products)로 이동되어야 한다.
+- [ ] 최종 가격이 실시간 디스플레이 되어야한다. (입력된 price, discountPercentage를 사용한다.)
+
+**상품 리스트 페이지**
+
+- [ ] 상품 리스트 조회 API는 (https://dummyjson.com/products)를 호출한다.
+- [ ] 페이지 진입 시 20개의 아이템만 노출되어야 한다.
+- [ ] 각 아이템은 다음의 정보를 포함해야한다.
+  - [ ] 상품명 (title)
+  - [ ] 상품설명 (description)
+  - [ ] 썸네일 이미지 (thumbnail)
+  - [ ] 별점 (rating)
+  - [ ] 리뷰 수 (reviews)
+- [ ] View 방식은 다음 두 종류로 구성된다.
+  - 리스트형 (List): 한 줄에 1개 아이템
+  - 그리드형 (Grid): 한 줄에 4개 아이템
+- [ ] View 표시 방식은 다음과 같다.
+  - [ ] 페이지 최초 진입 시 50% 확률로 랜덤하게 View 방식이 결정된다.
+  - [ ] 이용자는 페이지 진입 한 후에 배정된 View 방식 이외의 방식을 볼 수 없다.
+  - [ ] 결정된 View 방식은 24시간 동안 유지되어야 한다.
+  - [ ] 24시간 이후 재접속 시 다시 랜덤으로 View 방식이 결정된다.
+  - [ ] 리스트 상단에는 상품 생성 페이지(/products/new)로 이동하는 버튼이 존재해야 한다.
