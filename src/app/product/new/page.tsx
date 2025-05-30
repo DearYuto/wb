@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as Form from '@radix-ui/react-form';
 
 import { ProductType } from '@/domains/product/types/product';
+import * as Form from '@radix-ui/react-form';
+import { createProduct } from '@/domains/product/service/createProductService';
 
 const CreateProductPage = () => {
   const {
@@ -16,8 +17,11 @@ const CreateProductPage = () => {
   const [price, setPrice] = useState(0);
   const [discountPercentage, setDiscountPercentage] = useState(0);
 
-  const onSubmitForm = (data: ProductType) => {
-    console.log(data);
+  const onSubmitForm = async (data: ProductType) => {
+    const product = await createProduct(data);
+
+    // TODO: 모달 처리 후 서브밋
+    console.log(product);
   };
 
   return (
@@ -29,7 +33,7 @@ const CreateProductPage = () => {
           <Form.Control asChild>
             <input
               {...register('title', {
-                required: '필수 입력',
+                required: '*required',
                 maxLength: { value: 15, message: '15자 이하로 입력해주세요' },
               })}
             />
@@ -65,7 +69,7 @@ const CreateProductPage = () => {
             <input
               type="number"
               {...register('price', {
-                required: '필수 입력',
+                required: '*required',
                 min: { value: 1000, message: '1,000원 이상 입력해주세요' },
               })}
             />
@@ -128,9 +132,14 @@ const CreateProductPage = () => {
           {errors.brand && <Form.Message>{errors.brand.message}</Form.Message>}
         </Form.Field>
 
-        <Form.Submit>Create</Form.Submit>
+        <Form.Submit
+          onClick={() => {
+            console.log('first');
+          }}
+        >
+          Create
+        </Form.Submit>
       </Form.Root>
-
       <div>최종 가격: {price * (1 - discountPercentage / 100)}</div>
     </section>
   );
