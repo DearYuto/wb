@@ -12,6 +12,7 @@
     "install:e2e": "npx playwright install"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-form": "^0.1.7",
     "@radix-ui/react-select": "^2.2.5",
@@ -19,7 +20,8 @@
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hook-form": "^7.56.4"
+    "react-hook-form": "^7.56.4",
+    "zod": "^3.25.45"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
