@@ -7,5 +7,11 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
     await page.goto(PRODUCT_CREATE_PAGE_ENDPOINT);
   });
 
-  // TODO 상품 등록 테스트 추가
+  test('상품 생성 페이지가 정상적으로 렌더링됩니다.', async ({ page }) => {
+    const ENDPOINT = '/products/new';
+
+    await page.goto(ENDPOINT);
+
+    await expect(page).toHaveURL(ENDPOINT);
+  });
 });
