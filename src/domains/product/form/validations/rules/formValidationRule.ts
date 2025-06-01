@@ -30,6 +30,9 @@ const formValidationRule: FormValidationRule = {
       value: 1000,
       message: '상품 가격은 1,000원 이상이어야 합니다.',
     },
+    error: {
+      message: '상품 가격을 입력해주세요.',
+    },
   },
   discountPercentage: {
     max: {

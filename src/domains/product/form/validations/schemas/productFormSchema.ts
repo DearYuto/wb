@@ -18,6 +18,7 @@ const productFormSchema = () => {
     const fieldSchema = buildZodSchema({
       type: field.type,
       validationRule: rule,
+      optional: field.required,
     });
 
     schema[field.name] = fieldSchema;
