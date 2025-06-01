@@ -115,6 +115,7 @@ const CreateProductPage = () => {
           <Form.Label>Brand</Form.Label>
           <Form.Control asChild>
             <select
+              defaultValue="weebur"
               required
               {...register('brand', {
                 required: '필수 선택',
@@ -123,9 +124,7 @@ const CreateProductPage = () => {
               <optgroup label="브랜드">
                 <option value="apple">Apple</option>
                 <option value="samsung">Samsung</option>
-                <option selected value="weebur">
-                  Weebur
-                </option>
+                <option value="weebur">Weebur</option>
               </optgroup>
             </select>
           </Form.Control>
