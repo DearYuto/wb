@@ -7,16 +7,22 @@ npm run dev
 
 > #### 테스트 실행 방법
 
+**테스트 실행 브라우저 설치**
+
+```
+npx playwright install
+```
+
 **기본 테스트 실행**
 
 ```
-npx playwright test
+npx run test
 ```
 
 **UI 모드 테스트**
 
 ```
-npx playwright test --ui
+npx run test:ui
 ```
 
 ---
