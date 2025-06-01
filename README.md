@@ -10,19 +10,19 @@ npm run dev
 **테스트 실행 브라우저 설치**
 
 ```
-npx playwright install
+npm run install:e2e
 ```
 
 **기본 테스트 실행**
 
 ```
-npx run test
+npm run test:e2e
 ```
 
 **UI 모드 테스트**
 
 ```
-npx run test:ui
+npm run test:e2e-ui
 ```
 
 ---
