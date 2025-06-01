@@ -31,18 +31,28 @@ const CreateProductPage = () => {
   };
 
   return (
-    <section>
-      <h2>Create Product</h2>
-      <Form.Root onSubmit={handleSubmit(onSubmitForm)}>
+    <section className="flex flex-col gap-4 justify-center items-center h-screen w-full">
+      <h2 className="text-2xl font-bold">Create Product</h2>
+      <Form.Root
+        onSubmit={handleSubmit(onSubmitForm)}
+        className="flex flex-col gap-2 w-full max-w-md"
+      >
         {formFields.map((field) => (
-          <Form.Field key={field.name} name={field.name}>
-            <Form.Label>{field.label}</Form.Label>
+          <Form.Field className="flex flex-col gap-2" key={field.name} name={field.name}>
+            <div className="flex gap-2 items-center justify-between">
+              <Form.Label className="text-sm font-medium text-gray-700 ">{field.label}</Form.Label>
+              {errors[field.name] && (
+                <Form.Message className="text-red-500 text-xs">
+                  {errors[field.name]?.message}
+                </Form.Message>
+              )}
+            </div>
             <Form.Control asChild>{renderers[field.type](field, register)}</Form.Control>
-            {errors[field.name] && <Form.Message>{errors[field.name]?.message}</Form.Message>}
           </Form.Field>
         ))}
 
         <Form.Submit
+          className="bg-blue-500 text-white p-2 rounded-md"
           onClick={() => {
             console.log('first');
           }}
@@ -57,28 +67,41 @@ const CreateProductPage = () => {
 
 const renderers = {
   text: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
-    <input type="text" placeholder={field.placeholder} {...register(field.name)} />
+    <input
+      className="border border-gray-300 rounded-md p-2"
+      type="text"
+      placeholder={field.placeholder}
+      {...register(field.name)}
+    />
   ),
   number: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
     <input
-      value={0}
+      className="border border-gray-300 rounded-md p-2"
       type="number"
       placeholder={field.placeholder}
-      {...register(field.name, {
-        valueAsNumber: true,
-        required: field.required,
-      })}
+      {...register(field.name, { valueAsNumber: true, required: field.required })}
     />
   ),
   textarea: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
-    <textarea placeholder={field.placeholder} {...register(field.name)} />
+    <textarea
+      className="border border-gray-300 rounded-md p-2 resize-none"
+      placeholder={field.placeholder}
+      {...register(field.name)}
+    />
   ),
   select: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => {
     if (field.type !== 'select') return null;
 
+    const defaultValue = field.options.find((option) => option.selected)?.value;
+
     return (
-      <select defaultValue="" {...register(field.name)} required={field.required}>
-        <option value="" disabled>
+      <select
+        className="border border-gray-300 rounded-md p-2"
+        defaultValue={defaultValue}
+        {...register(field.name)}
+        required={field.required}
+      >
+        <option className="text-gray-500" value="" disabled>
           {field.placeholder}
         </option>
         {field.options.map((option) => (
