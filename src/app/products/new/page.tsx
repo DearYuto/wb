@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm, UseFormRegister } from 'react-hook-form';
+import { useForm, UseFormRegister, useWatch } from 'react-hook-form';
 
 import { ProductType } from '@/domains/product/types/product';
 import * as Form from '@radix-ui/react-form';
@@ -13,6 +12,7 @@ import { ProductFormFieldType } from '@/domains/product/types/productFormField';
 
 const CreateProductPage = () => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
@@ -20,8 +20,9 @@ const CreateProductPage = () => {
     resolver: zodResolver(productFormSchema),
   });
 
-  const [price, setPrice] = useState(0);
-  const [discountPercentage, setDiscountPercentage] = useState(0);
+  const price = useWatch({ name: 'price', control }) || 0;
+  const discountPercentage = useWatch({ name: 'discountPercentage', control }) || 0;
+  const finalPrice = price * (1 - discountPercentage / 100);
 
   const onSubmitForm = async (data: ProductType) => {
     const product = await createProduct(data);
@@ -51,6 +52,8 @@ const CreateProductPage = () => {
           </Form.Field>
         ))}
 
+        <div>최종 가격: {finalPrice.toLocaleString()}</div>
+
         <Form.Submit
           className="bg-blue-500 text-white p-2 rounded-md"
           onClick={() => {
@@ -60,7 +63,6 @@ const CreateProductPage = () => {
           Create
         </Form.Submit>
       </Form.Root>
-      <div>최종 가격: {price * (1 - discountPercentage / 100)}</div>
     </section>
   );
 };
