@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useForm, UseFormRegister, useWatch } from 'react-hook-form';
 import { toast, Toaster } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import { ProductType } from '@/domains/product/types/product';
 import * as Form from '@radix-ui/react-form';
@@ -14,6 +15,8 @@ import formFields from '@/domains/product/form/fields/formFields';
 import { ProductFormFieldType } from '@/domains/product/types/productFormField';
 
 const CreateProductPage = () => {
+  const router = useRouter();
+
   const {
     control,
     register,
@@ -35,6 +38,21 @@ const CreateProductPage = () => {
   const onValid = (data: ProductType) => {
     setFormData(data);
     setShowConfirmModal(true);
+  };
+
+  const onSubmitForm = async (data: ProductType) => {
+    try {
+      setIsLoading(true);
+      await createProduct(data);
+      toast.success('상품이 등록되었습니다.');
+      router.push('/products');
+    } catch (error) {
+      console.error(error);
+      toast.error('상품 생성에 실패했습니다.');
+    } finally {
+      setShowConfirmModal(false);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -64,20 +82,7 @@ const CreateProductPage = () => {
               <button
                 onClick={async () => {
                   if (formData) {
-                    try {
-                      setIsLoading(true);
-
-                      await createProduct(formData);
-                      toast.success('상품이 생성되었습니다.');
-
-                      // TODO:상품 리스트 페이지로 이동
-                    } catch (error) {
-                      console.error(error);
-                      toast.error('상품 생성에 실패했습니다.');
-                    } finally {
-                      setShowConfirmModal(false);
-                      setIsLoading(false);
-                    }
+                    await onSubmitForm(formData);
                   }
                 }}
                 disabled={isLoading}
