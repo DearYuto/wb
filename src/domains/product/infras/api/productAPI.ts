@@ -25,4 +25,10 @@ export const productAPI = {
       throw error;
     }
   },
+
+  async getProducts(): Promise<ProductType[]> {
+    const response = await fetch(`${API_BASE_URL}/products`);
+    const data = await response.json();
+    return data;
+  },
 };
