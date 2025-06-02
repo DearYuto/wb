@@ -1,4 +1,5 @@
 import { ProductType } from '@/domains/product/types/product';
+import { ProductQueryParams } from '../models/ProductQueryParams';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://dummyjson.com';
 
@@ -26,8 +27,10 @@ export const productAPI = {
     }
   },
 
-  async getProducts(): Promise<ProductType[]> {
-    const response = await fetch(`${API_BASE_URL}/products`);
+  async getProducts(queryParams: ProductQueryParams) {
+    const response = await fetch(
+      `${API_BASE_URL}/products?${new URLSearchParams(queryParams as Record<string, string>).toString()}`
+    );
     const data = await response.json();
     return data;
   },
