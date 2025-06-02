@@ -33,7 +33,7 @@ const CreateProductPage = () => {
 
   const price = useWatch({ name: 'price', control }) || 0;
   const discountPercentage = useWatch({ name: 'discountPercentage', control }) || 0;
-  const finalPrice = price * (1 - discountPercentage / 100);
+  const finalPrice = Math.max(0, price * (1 - discountPercentage / 100));
 
   const onValid = (data: ProductType) => {
     setFormData(data);
