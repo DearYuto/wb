@@ -35,6 +35,10 @@ const formValidationRule: FormValidationRule = {
     },
   },
   discountPercentage: {
+    min: {
+      value: 0,
+      message: '할인율은 0% 이상이어야 합니다.',
+    },
     max: {
       value: 100,
       message: '할인율은 100% 이하로 입력해주세요.',
