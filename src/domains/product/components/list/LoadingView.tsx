@@ -1,3 +1,4 @@
+import { ViewType } from '../../types/viewType';
 import ProductGridView from './ProductGridView';
 import ProductListView from './ProductListView';
 import SkeletonCard from './SkeletonCard';
