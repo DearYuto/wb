@@ -7,11 +7,11 @@ import { useInfiniteProducts } from '@/domains/product/infras/queries/useGetProd
 import { InfiniteTrigger } from '@/common/components/InfiniteTrigger';
 import SkeletonCard from './SkeletonCard';
 
-interface ProductListProps {
+interface ProductListContainerProps {
   viewType: ViewType;
 }
 
-const ProductList = ({ viewType }: ProductListProps) => {
+const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
   const {
     data: productDatas,
     fetchNextPage,
@@ -39,30 +39,28 @@ const ProductList = ({ viewType }: ProductListProps) => {
   }
 
   return (
-    <section className="p-4">
+    <section className="overflow-x-auto">
       <div
         className={
-          viewType === 'grid'
-            ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'
-            : 'flex flex-col gap-4'
+          viewType === 'grid' ? 'grid min-w-[1024px] grid-cols-4 gap-4' : 'flex flex-col gap-4'
         }
       >
         {productDatas?.pages.flatMap((datas) => {
           return datas.products.map((product) => (
             <div
               key={product.id}
-              className="border rounded-md p-4 shadow hover:shadow-md transition"
+              className="rounded-md border p-4 shadow transition hover:shadow-md"
             >
               <Image
                 width={100}
                 height={100}
                 src={product.thumbnail}
                 alt={product.title}
-                className="w-full h-40 object-cover rounded"
+                className="h-40 w-full rounded object-cover"
               />
-              <h2 className="text-lg font-bold mt-2">{product.title}</h2>
-              <p className="text-sm text-gray-600 mt-1">{product.description}</p>
-              <div className="text-sm text-gray-500 mt-2">
+              <h2 className="mt-2 text-lg font-bold">{product.title}</h2>
+              <p className="mt-1 text-sm text-gray-600">{product.description}</p>
+              <div className="mt-2 text-sm text-gray-500">
                 ⭐ {product.rating} / 리뷰 {product.reviews.length}
               </div>
             </div>
@@ -85,4 +83,4 @@ const ProductList = ({ viewType }: ProductListProps) => {
   );
 };
 
-export default ProductList;
+export default ProductListContainer;
