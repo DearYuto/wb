@@ -1,7 +1,11 @@
 import ProductsLayout from '@/common/layouts/ProductsLayout';
 
 const NewProductLayout = ({ children }: { children: React.ReactNode }) => {
-  return <ProductsLayout showCreateButton={false}>{children}</ProductsLayout>;
+  return (
+    <main className="h-full">
+      <ProductsLayout showCreateButton={false}>{children}</ProductsLayout>
+    </main>
+  );
 };
 
 export default NewProductLayout;
