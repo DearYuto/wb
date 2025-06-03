@@ -14,6 +14,7 @@ import formFields from '@/domains/product/form/fields/formFields';
 import CreateConfirmModal from '@/domains/product/components/new/CreateConfirmModal';
 import Button from '@/common/components/Button';
 import ProductFormFieldRenderer from '@/domains/product/components/new/ProductFormFieldRenderer';
+import { useFinalPrice } from '@/domains/product/hooks/useFinalPrice';
 
 const CreateProductPage = () => {
   const router = useRouter();
@@ -32,9 +33,7 @@ const CreateProductPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<ProductType>();
 
-  const price = useWatch({ name: 'price', control }) || 0;
-  const discountPercentage = useWatch({ name: 'discountPercentage', control }) || 0;
-  const finalPrice = Math.max(0, price * (1 - discountPercentage / 100));
+  const finalPrice = useFinalPrice(control);
 
   const onValid = (data: ProductType) => {
     setFormData(data);
