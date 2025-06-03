@@ -3,18 +3,40 @@
 import { ViewType } from '@/domains/product/types/viewType';
 import Image from 'next/image';
 import { useInfiniteScrollTrigger } from '@/common/hooks/useInfiniteScrollTrigger';
-import { useInfiniteProducts } from '../../infras/queries/useGetProducts';
+import { useInfiniteProducts } from '@/domains/product/infras/queries/useGetProducts';
 import { InfiniteTrigger } from '@/common/components/InfiniteTrigger';
+import SkeletonCard from './SkeletonCard';
 
 interface ProductListProps {
   viewType: ViewType;
 }
 
 const ProductList = ({ viewType }: ProductListProps) => {
-  const { data: productDatas, fetchNextPage, hasNextPage, isLoading } = useInfiniteProducts({});
+  const {
+    data: productDatas,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetching,
+  } = useInfiniteProducts({});
   const { ref } = useInfiniteScrollTrigger({ fetchNextPage, hasNextPage });
 
-  if (isLoading) return <div>Loading...</div>;
+  const layoutClass =
+    viewType === 'grid'
+      ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'
+      : 'flex flex-col gap-4';
+
+  if (isLoading) {
+    return (
+      <section className="p-4">
+        <div className={layoutClass}>
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <SkeletonCard key={idx} />
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="p-4">
@@ -46,8 +68,19 @@ const ProductList = ({ viewType }: ProductListProps) => {
             </div>
           ));
         })}
+
         <InfiniteTrigger ref={ref} />
       </div>
+
+      {isFetching && (
+        <section className="p-4">
+          <div className={layoutClass}>
+            {Array.from({ length: 8 }).map((_, idx) => (
+              <SkeletonCard key={idx} />
+            ))}
+          </div>
+        </section>
+      )}
     </section>
   );
 };
