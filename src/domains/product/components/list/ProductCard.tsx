@@ -9,6 +9,7 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <article
+      data-testid="product-card"
       key={product.id}
       className="group relative flex h-full min-h-[358px] cursor-pointer flex-col justify-between rounded-md border p-4 shadow-sm transition hover:border-gray-300 hover:shadow-md"
     >
