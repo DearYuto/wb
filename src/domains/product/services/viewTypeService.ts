@@ -1,4 +1,4 @@
-import { PRODUCT_API_ENDPOINTS } from '@/constants/api/endpoint';
+import { PRODUCT_API_ENDPOINTS } from '@/common/constants/api/endpoint';
 import { ViewType } from '../types/viewType';
 
 export const fetchViewType = async (): Promise<ViewType> => {

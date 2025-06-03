@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ViewType } from '../types/viewType';
-import { PRODUCT_API_ENDPOINTS } from '@/constants/api/endpoint';
+import { PRODUCT_API_ENDPOINTS } from '@/common/constants/api/endpoint';
 import { getRandomViewType } from '../utils/getRandomViewType';
 
 export const useViewType = () => {
