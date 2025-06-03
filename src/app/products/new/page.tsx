@@ -2,18 +2,17 @@
 
 import { useState } from 'react';
 import { useForm, UseFormRegister, useWatch } from 'react-hook-form';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 import { ProductType } from '@/domains/product/types/product';
 import * as Form from '@radix-ui/react-form';
-import * as Dialog from '@radix-ui/react-dialog';
 import { createProduct } from '@/domains/product/services/createProductService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import productFormSchema from '@/domains/product/form/validations/schemas/productFormSchema';
 import formFields from '@/domains/product/form/fields/formFields';
 import { ProductFormFieldType } from '@/domains/product/types/productFormField';
-import Modal from '@/common/components/Modal';
+import CreateConfirmModal from '@/domains/product/components/new/CreateConfirmModal';
 
 const CreateProductPage = () => {
   const router = useRouter();
@@ -30,7 +29,7 @@ const CreateProductPage = () => {
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<ProductType | null>(null);
+  const [formData, setFormData] = useState<ProductType>();
 
   const price = useWatch({ name: 'price', control }) || 0;
   const discountPercentage = useWatch({ name: 'discountPercentage', control }) || 0;
@@ -58,58 +57,16 @@ const CreateProductPage = () => {
 
   return (
     <section className="mt-6 flex flex-col items-center justify-center">
-      <Modal
-        showConfirmModal={showConfirmModal}
-        setShowConfirmModal={setShowConfirmModal}
-        title={'입력한 정보로 상품을 등록할까요?'}
-      >
-        <div className="mx-auto w-full max-w-md rounded-2xl bg-white/70 p-6 backdrop-blur-md transition-all duration-200">
-          <div className="mb-6 rounded-xl border border-gray-100 bg-gray-50/70 px-6 py-5 backdrop-blur-sm">
-            <ul className="divide-y divide-gray-200/70">
-              <li className="flex justify-between py-2 text-base">
-                <span className="font-medium text-gray-500">상품명</span>
-                <span className="text-gray-900">{formData?.title}</span>
-              </li>
-              <li className="flex justify-between py-2 text-base">
-                <span className="font-medium text-gray-500">가격</span>
-                <span className="text-gray-900">{formData?.price?.toLocaleString()}원</span>
-              </li>
-              <li className="flex justify-between py-2 text-base">
-                <span className="font-medium text-gray-500">할인율</span>
-                <span className="text-gray-900">{formData?.discountPercentage}%</span>
-              </li>
-              <li className="flex justify-between py-2 text-base">
-                <span className="font-medium text-gray-500">브랜드</span>
-                <span className="text-gray-900">{formData?.brand}</span>
-              </li>
-              <li className="flex items-center justify-between rounded-lg pt-4">
-                <span className="font-bold text-blue-500">최종 가격</span>
-                <span className="text-xl font-bold text-blue-500">
-                  {finalPrice.toLocaleString()}원
-                </span>
-              </li>
-            </ul>
-          </div>
-          <div className="flex justify-center gap-3 pt-4">
-            <Dialog.Close asChild>
-              <button className="w-full rounded-lg border border-gray-200 bg-white/80 px-5 py-2 text-base font-bold text-gray-700 backdrop-blur-sm transition">
-                취소
-              </button>
-            </Dialog.Close>
-            <button
-              onClick={async () => {
-                if (formData) {
-                  await onSubmitForm(formData);
-                }
-              }}
-              disabled={isLoading}
-              className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90 disabled:opacity-50"
-            >
-              {isLoading ? '생성 중...' : '확인'}
-            </button>
-          </div>
-        </div>
-      </Modal>
+      {formData && (
+        <CreateConfirmModal
+          open={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={() => onSubmitForm(formData)}
+          isLoading={isLoading}
+          formData={formData}
+          finalPrice={finalPrice}
+        />
+      )}
 
       <div className="relative mb-6 flex flex-col items-center justify-center">
         <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
@@ -154,7 +111,7 @@ const CreateProductPage = () => {
 
         <Form.Submit
           disabled={!isValid}
-          className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90"
+          className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Create
         </Form.Submit>
