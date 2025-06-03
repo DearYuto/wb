@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
 import { ProductType } from '@/domains/product/types/product';
-import { createProduct } from '@/domains/product/services/createProductService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import productFormSchema from '@/domains/product/form/validations/schemas/productFormSchema';
 import CreateConfirmModal from '@/domains/product/components/new/CreateConfirmModal';
@@ -13,6 +12,7 @@ import { useFinalPrice } from '@/domains/product/hooks/useFinalPrice';
 import ProductForm from '@/domains/product/components/new/ProductForm';
 import { useForm } from 'react-hook-form';
 import ProductFormHeader from '@/domains/product/components/new/ProductFormHeader';
+import { useCreateProductMutation } from '@/domains/product/infras/queries/usePostProducts';
 
 const CreateProductPage = () => {
   const router = useRouter();
@@ -38,17 +38,21 @@ const CreateProductPage = () => {
     setShowConfirmModal(true);
   };
 
+  const { mutateAsync: createProductMutationAsync } = useCreateProductMutation({
+    afterSuccess: () => {
+      toast.success('상품이 등록되었습니다.');
+      router.push('/products');
+    },
+    afterError: () => {
+      toast.error('상품 등록에 실패했습니다.');
+    },
+  });
+
   const onSubmitForm = async (data: ProductType) => {
     try {
       setIsLoading(true);
-      await createProduct(data);
-      toast.success('상품이 등록되었습니다.');
-      router.push('/products');
-    } catch (error) {
-      console.error(error);
-      toast.error('상품 생성에 실패했습니다.');
+      await createProductMutationAsync(data);
     } finally {
-      setShowConfirmModal(false);
       setIsLoading(false);
     }
   };
