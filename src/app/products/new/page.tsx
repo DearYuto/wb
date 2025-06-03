@@ -13,6 +13,7 @@ import productFormSchema from '@/domains/product/form/validations/schemas/produc
 import formFields from '@/domains/product/form/fields/formFields';
 import { ProductFormFieldType } from '@/domains/product/types/productFormField';
 import CreateConfirmModal from '@/domains/product/components/new/CreateConfirmModal';
+import Button from '@/common/components/Button';
 
 const CreateProductPage = () => {
   const router = useRouter();
@@ -109,12 +110,9 @@ const CreateProductPage = () => {
           <span className="text-xl font-bold text-blue-500">{finalPrice.toLocaleString()}원</span>
         </div>
 
-        <Form.Submit
-          disabled={!isValid}
-          className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Create
-        </Form.Submit>
+        <Button variant="confirm" disabled={!isValid} onClick={handleSubmit(onValid)}>
+          등록하기
+        </Button>
       </Form.Root>
     </section>
   );
