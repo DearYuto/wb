@@ -32,7 +32,7 @@ const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
   const ViewLayout = viewType === 'grid' ? ProductGridView : ProductListView;
 
   return (
-    <section className="overflow-x-auto">
+    <section>
       <ViewLayout>
         {productDatas?.pages.flatMap((datas) => {
           return datas.products.map((product) => (
@@ -42,6 +42,7 @@ const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
       </ViewLayout>
 
       <InfiniteTrigger ref={ref} />
+
       {isFetching && <LoadingView viewType={viewType} />}
     </section>
   );
