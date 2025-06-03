@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import productFormSchema from '@/domains/product/form/validations/schemas/productFormSchema';
 import formFields from '@/domains/product/form/fields/formFields';
 import { ProductFormFieldType } from '@/domains/product/types/productFormField';
+import Modal from '@/common/components/Modal';
 
 const CreateProductPage = () => {
   const router = useRouter();
@@ -56,56 +57,88 @@ const CreateProductPage = () => {
   };
 
   return (
-    <section className="flex flex-col gap-4 justify-center items-center h-screen w-full">
-      <Toaster />
-      <Dialog.Root open={showConfirmModal} onOpenChange={setShowConfirmModal}>
-        <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/30" />
-          <Dialog.Content className="bg-white p-4 rounded-md shadow-md max-w-md w-full fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Dialog.Title className="text-lg font-bold">
-              입력한 정보로 상품을 등록할까요?
-            </Dialog.Title>
-            <div className="mt-2 text-sm text-gray-700">
-              <p>상품명: {formData?.title}</p>
-              <p>가격: {formData?.price?.toLocaleString()}원</p>
-              <p>할인율: {formData?.discountPercentage}%</p>
-              <p>브랜드: {formData?.brand}</p>
-              <p>최종 가격: {finalPrice.toLocaleString()}원</p>
-            </div>
-            <div className="mt-4 flex justify-end gap-2">
-              <button
-                onClick={() => setShowConfirmModal(false)}
-                className="px-4 py-1 text-sm rounded border"
-              >
+    <section className="mt-6 flex flex-col items-center justify-center">
+      <Modal
+        showConfirmModal={showConfirmModal}
+        setShowConfirmModal={setShowConfirmModal}
+        title={'입력한 정보로 상품을 등록할까요?'}
+      >
+        <div className="mx-auto w-full max-w-md rounded-2xl bg-white/70 p-6 backdrop-blur-md transition-all duration-200">
+          <div className="mb-6 rounded-xl border border-gray-100 bg-gray-50/70 px-6 py-5 backdrop-blur-sm">
+            <ul className="divide-y divide-gray-200/70">
+              <li className="flex justify-between py-2 text-base">
+                <span className="font-medium text-gray-500">상품명</span>
+                <span className="text-gray-900">{formData?.title}</span>
+              </li>
+              <li className="flex justify-between py-2 text-base">
+                <span className="font-medium text-gray-500">가격</span>
+                <span className="text-gray-900">{formData?.price?.toLocaleString()}원</span>
+              </li>
+              <li className="flex justify-between py-2 text-base">
+                <span className="font-medium text-gray-500">할인율</span>
+                <span className="text-gray-900">{formData?.discountPercentage}%</span>
+              </li>
+              <li className="flex justify-between py-2 text-base">
+                <span className="font-medium text-gray-500">브랜드</span>
+                <span className="text-gray-900">{formData?.brand}</span>
+              </li>
+              <li className="flex items-center justify-between rounded-lg pt-4">
+                <span className="font-bold text-blue-500">최종 가격</span>
+                <span className="text-xl font-bold text-blue-500">
+                  {finalPrice.toLocaleString()}원
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className="flex justify-center gap-3 pt-4">
+            <Dialog.Close asChild>
+              <button className="w-full rounded-lg border border-gray-200 bg-white/80 px-5 py-2 text-base font-bold text-gray-700 backdrop-blur-sm transition">
                 취소
               </button>
-              <button
-                onClick={async () => {
-                  if (formData) {
-                    await onSubmitForm(formData);
-                  }
-                }}
-                disabled={isLoading}
-                className="px-4 py-1 text-sm rounded bg-blue-500 text-white disabled:opacity-50"
-              >
-                {isLoading ? '생성 중...' : '확인'}
-              </button>
-            </div>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+            </Dialog.Close>
+            <button
+              onClick={async () => {
+                if (formData) {
+                  await onSubmitForm(formData);
+                }
+              }}
+              disabled={isLoading}
+              className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90 disabled:opacity-50"
+            >
+              {isLoading ? '생성 중...' : '확인'}
+            </button>
+          </div>
+        </div>
+      </Modal>
 
-      <h2 className="text-2xl font-bold">Create Product</h2>
-      <Form.Root onSubmit={handleSubmit(onValid)} className="flex flex-col gap-2 w-full max-w-md">
+      <div className="relative mb-6 flex flex-col items-center justify-center">
+        <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+          <svg
+            className="h-5 w-5 text-blue-500"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">상품 등록</h2>
+        <p className="mt-1 text-sm text-gray-500">새로운 상품 정보를 입력해 주세요.</p>
+      </div>
+      <Form.Root
+        onSubmit={handleSubmit(onValid)}
+        className="mx-auto w-full max-w-md rounded-2xl transition-all duration-200"
+      >
         {formFields.map((field) => (
-          <Form.Field className="flex flex-col gap-2" key={field.name} name={field.name}>
-            <div className="flex gap-2 items-center justify-between">
-              <Form.Label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+          <Form.Field className="mb-4 flex flex-col gap-2" key={field.name} name={field.name}>
+            <div className="flex items-center justify-between gap-2">
+              <Form.Label className="flex items-center gap-1 text-base font-semibold text-gray-700">
                 {field.required && <span className="text-red-500">*</span>}
                 <span className={field.required ? 'font-bold' : ''}>{field.label}</span>
               </Form.Label>
               {errors[field.name] && (
-                <Form.Message className="text-red-500 text-xs">
+                <Form.Message className="text-xs text-red-500">
                   {errors[field.name]?.message}
                 </Form.Message>
               )}
@@ -114,11 +147,14 @@ const CreateProductPage = () => {
           </Form.Field>
         ))}
 
-        <div>최종 가격: {finalPrice.toLocaleString()}</div>
+        <div className="my-4 flex items-center justify-between rounded-lg border border-blue-200 bg-blue-50 px-3 py-3">
+          <span className="font-bold text-blue-500">최종 가격</span>
+          <span className="text-xl font-bold text-blue-500">{finalPrice.toLocaleString()}원</span>
+        </div>
 
         <Form.Submit
           disabled={!isValid}
-          className="bg-blue-500 text-white p-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90"
         >
           Create
         </Form.Submit>
@@ -130,7 +166,7 @@ const CreateProductPage = () => {
 const renderers = {
   text: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
     <input
-      className="border border-gray-300 rounded-md p-2"
+      className="rounded-md border border-gray-300 p-2"
       type="text"
       placeholder={field.placeholder}
       {...register(field.name)}
@@ -138,7 +174,7 @@ const renderers = {
   ),
   number: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
     <input
-      className="border border-gray-300 rounded-md p-2"
+      className="rounded-md border border-gray-300 p-2"
       type="number"
       min={0}
       placeholder={field.placeholder}
@@ -147,7 +183,7 @@ const renderers = {
   ),
   textarea: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
     <textarea
-      className="border border-gray-300 rounded-md p-2 resize-none"
+      className="resize-none rounded-md border border-gray-300 p-2"
       placeholder={field.placeholder}
       {...register(field.name)}
     />
@@ -159,7 +195,7 @@ const renderers = {
 
     return (
       <select
-        className="border border-gray-300 rounded-md p-2"
+        className="rounded-md border border-gray-300 p-2"
         defaultValue={defaultValue}
         {...register(field.name)}
         required={field.required}
