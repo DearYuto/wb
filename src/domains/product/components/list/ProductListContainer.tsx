@@ -39,7 +39,7 @@ const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
   }
 
   return (
-    <section className="overflow-x-auto">
+    <section className="overflow-x-auto p-4">
       <div
         className={
           viewType === 'grid' ? 'grid min-w-[1024px] grid-cols-4 gap-4' : 'flex flex-col gap-4'
