@@ -1,7 +1,6 @@
 'use client';
 
 import { ViewType } from '@/domains/product/types/viewType';
-import Image from 'next/image';
 
 import { useInfiniteScrollTrigger } from '@/common/hooks/useInfiniteScrollTrigger';
 import { useInfiniteProducts } from '@/domains/product/infras/queries/useGetProducts';

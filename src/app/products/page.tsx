@@ -2,12 +2,16 @@
 
 import ProductListContainer from '@/domains/product/components/list/ProductListContainer';
 import { useViewType } from '@/domains/product/hooks/useProductsViewType';
-import Spinner from '@/common/components/Spinner';
+import LoadingContainer from '@/common/components/LoadingContainer';
 
 export default function ProductsPage() {
   const { viewType, isLoading } = useViewType();
 
-  const showSpinner = isLoading || !viewType;
+  if (!viewType) return null;
 
-  return <>{showSpinner ? <Spinner /> : <ProductListContainer viewType={viewType} />}</>;
+  return (
+    <LoadingContainer isLoading={isLoading}>
+      <ProductListContainer viewType={viewType} />
+    </LoadingContainer>
+  );
 }
