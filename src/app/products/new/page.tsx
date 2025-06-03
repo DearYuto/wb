@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm, UseFormRegister, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
@@ -11,9 +11,9 @@ import { createProduct } from '@/domains/product/services/createProductService';
 import { zodResolver } from '@hookform/resolvers/zod';
 import productFormSchema from '@/domains/product/form/validations/schemas/productFormSchema';
 import formFields from '@/domains/product/form/fields/formFields';
-import { ProductFormFieldType } from '@/domains/product/types/productFormField';
 import CreateConfirmModal from '@/domains/product/components/new/CreateConfirmModal';
 import Button from '@/common/components/Button';
+import ProductFormFieldRenderer from '@/domains/product/components/new/ProductFormFieldRenderer';
 
 const CreateProductPage = () => {
   const router = useRouter();
@@ -101,7 +101,9 @@ const CreateProductPage = () => {
                 </Form.Message>
               )}
             </div>
-            <Form.Control asChild>{renderers[field.type](field, register)}</Form.Control>
+            <Form.Control asChild>
+              <ProductFormFieldRenderer field={field} register={register} />
+            </Form.Control>
           </Form.Field>
         ))}
 
@@ -116,56 +118,6 @@ const CreateProductPage = () => {
       </Form.Root>
     </section>
   );
-};
-
-const renderers = {
-  text: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
-    <input
-      className="rounded-md border border-gray-300 p-2"
-      type="text"
-      placeholder={field.placeholder}
-      {...register(field.name)}
-    />
-  ),
-  number: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
-    <input
-      className="rounded-md border border-gray-300 p-2"
-      type="number"
-      min={0}
-      placeholder={field.placeholder}
-      {...register(field.name, { valueAsNumber: true, required: field.required })}
-    />
-  ),
-  textarea: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
-    <textarea
-      className="resize-none rounded-md border border-gray-300 p-2"
-      placeholder={field.placeholder}
-      {...register(field.name)}
-    />
-  ),
-  select: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => {
-    if (field.type !== 'select') return null;
-
-    const defaultValue = field.options.find((option) => option.selected)?.value;
-
-    return (
-      <select
-        className="rounded-md border border-gray-300 p-2"
-        defaultValue={defaultValue}
-        {...register(field.name)}
-        required={field.required}
-      >
-        <option className="text-gray-500" value="" disabled>
-          {field.placeholder}
-        </option>
-        {field.options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    );
-  },
 };
 
 export default CreateProductPage;
