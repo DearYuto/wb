@@ -90,7 +90,10 @@ const CreateProductPage = () => {
         {formFields.map((field) => (
           <Form.Field className="mb-4 flex flex-col gap-2" key={field.name} name={field.name}>
             <div className="flex items-center justify-between gap-2">
-              <Form.Label className="flex items-center gap-1 text-base font-semibold text-gray-700">
+              <Form.Label
+                htmlFor={field.name}
+                className="flex items-center gap-1 text-base font-semibold text-gray-700"
+              >
                 {field.required && <span className="text-red-500">*</span>}
                 <span className={field.required ? 'font-bold' : ''}>{field.label}</span>
               </Form.Label>

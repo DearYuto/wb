@@ -12,6 +12,7 @@ const ProductFormFieldRenderer = ({ field, register }: ProductFormFieldRendererP
   const fieldRenderer = {
     text: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
       <input
+        id={field.name}
         className="rounded-md border border-gray-300 p-2"
         type="text"
         placeholder={field.placeholder}
@@ -20,6 +21,7 @@ const ProductFormFieldRenderer = ({ field, register }: ProductFormFieldRendererP
     ),
     number: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
       <input
+        id={field.name}
         className="rounded-md border border-gray-300 p-2"
         type="number"
         min={0}
@@ -29,6 +31,7 @@ const ProductFormFieldRenderer = ({ field, register }: ProductFormFieldRendererP
     ),
     textarea: (field: ProductFormFieldType, register: UseFormRegister<ProductType>) => (
       <textarea
+        id={field.name}
         className="resize-none rounded-md border border-gray-300 p-2"
         placeholder={field.placeholder}
         {...register(field.name)}
@@ -41,6 +44,7 @@ const ProductFormFieldRenderer = ({ field, register }: ProductFormFieldRendererP
 
       return (
         <select
+          id={field.name}
           className="rounded-md border border-gray-300 p-2"
           defaultValue={defaultValue}
           {...register(field.name)}
