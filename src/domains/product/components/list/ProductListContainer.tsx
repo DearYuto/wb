@@ -6,6 +6,9 @@ import { useInfiniteScrollTrigger } from '@/common/hooks/useInfiniteScrollTrigge
 import { useInfiniteProducts } from '@/domains/product/infras/queries/useGetProducts';
 import { InfiniteTrigger } from '@/common/components/InfiniteTrigger';
 import SkeletonCard from './SkeletonCard';
+import ProductGridView from './ProductGridView';
+import ProductListView from './ProductListView';
+import LoadingView from './LoadingView';
 
 interface ProductListContainerProps {
   viewType: ViewType;
@@ -21,25 +24,12 @@ const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
   } = useInfiniteProducts({});
   const { ref } = useInfiniteScrollTrigger({ fetchNextPage, hasNextPage });
 
-  const layoutClass =
-    viewType === 'grid'
-      ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'
-      : 'flex flex-col gap-4';
-
   if (isLoading) {
-    return (
-      <section className="p-4">
-        <div className={layoutClass}>
-          {Array.from({ length: 8 }).map((_, idx) => (
-            <SkeletonCard key={idx} />
-          ))}
-        </div>
-      </section>
-    );
+    return <LoadingView viewType={viewType} />;
   }
 
   return (
-    <section className="overflow-x-auto p-4">
+    <section className="overflow-x-auto">
       <div
         className={
           viewType === 'grid' ? 'grid min-w-[1024px] grid-cols-4 gap-4' : 'flex flex-col gap-4'
@@ -70,15 +60,7 @@ const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
         <InfiniteTrigger ref={ref} />
       </div>
 
-      {isFetching && (
-        <section className="p-4">
-          <div className={layoutClass}>
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <SkeletonCard key={idx} />
-            ))}
-          </div>
-        </section>
-      )}
+      {isFetching && <LoadingView viewType={viewType} />}
     </section>
   );
 };
