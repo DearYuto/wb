@@ -1,5 +1,6 @@
 import Modal from '@/common/components/Modal';
 import { ProductType } from '../../types/product';
+import Button from '@/common/components/Button';
 
 interface CreateModalProps {
   open: boolean;
@@ -55,19 +56,12 @@ const CreateConfirmModal = ({
           </ul>
         </div>
         <div className="flex justify-center gap-3 pt-4">
-          <button
-            onClick={onClose}
-            className="w-full rounded-lg border border-gray-200 bg-white/80 px-5 py-2 text-base font-bold text-gray-700 backdrop-blur-sm transition"
-          >
+          <Button onClick={onClose} variant="cancel">
             취소
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={isLoading}
-            className="w-full rounded-lg bg-blue-500/90 px-5 py-2 text-base font-bold text-white backdrop-blur-sm transition hover:bg-blue-400/90 active:bg-blue-400/90 disabled:opacity-50"
-          >
-            {isLoading ? '생성 중...' : '확인'}
-          </button>
+          </Button>
+          <Button onClick={onConfirm} disabled={isLoading} variant="confirm">
+            {isLoading ? '등록 중...' : '확인'}
+          </Button>
         </div>
       </div>
     </Modal>
