@@ -28,7 +28,6 @@ const CreateProductPage = () => {
   });
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<ProductType>();
 
   const finalPrice = useFinalPrice(control);
@@ -38,7 +37,7 @@ const CreateProductPage = () => {
     setShowConfirmModal(true);
   };
 
-  const { mutateAsync: createProductMutationAsync } = useCreateProductMutation({
+  const { mutateAsync: createProductMutationAsync, isPending } = useCreateProductMutation({
     afterSuccess: () => {
       toast.success('상품이 등록되었습니다.');
       router.push('/products');
@@ -49,12 +48,7 @@ const CreateProductPage = () => {
   });
 
   const onSubmitForm = async (data: ProductType) => {
-    try {
-      setIsLoading(true);
-      await createProductMutationAsync(data);
-    } finally {
-      setIsLoading(false);
-    }
+    await createProductMutationAsync(data);
   };
 
   return (
@@ -64,7 +58,7 @@ const CreateProductPage = () => {
           open={showConfirmModal}
           onClose={() => setShowConfirmModal(false)}
           onConfirm={() => onSubmitForm(formData)}
-          isLoading={isLoading}
+          isLoading={isPending}
           formData={formData}
           finalPrice={finalPrice}
         />
