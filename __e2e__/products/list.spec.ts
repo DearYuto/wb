@@ -115,4 +115,20 @@ test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스�
     expect(isListView || isGridView).toBeTruthy();
     expect(isListView && isGridView).toBeFalsy();
   });
+
+  test('View 방식은 24시간 동안 유지됩니다.', async ({ page, context }) => {
+    await page.goto(PRODUCT_LIST_PAGE_ENDPOINT);
+    await page.waitForTimeout(300);
+
+    const cookies = await context.cookies(['http://localhost:3000/products']);
+    const viewTypeCookie = cookies.find((cookie) => cookie.name === 'viewType');
+
+    expect(viewTypeCookie).toBeDefined();
+    expect(viewTypeCookie?.expires).toBeDefined();
+
+    const expiresInMs = (viewTypeCookie!.expires ?? 0) * 1000 - Date.now();
+    const expiresInHours = expiresInMs / (60 * 60 * 1000);
+
+    expect(expiresInHours).toBeLessThanOrEqual(24);
+  });
 });
