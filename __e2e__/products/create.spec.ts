@@ -115,4 +115,23 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
     const finalPrice = page.getByText(expectedFinalPrice);
     await expect(finalPrice).toBeVisible();
   });
+
+  test('폼 제출에 성공하면 상품 리스트 페이지로 이동합니다.', async ({ page }) => {
+    // given
+    const validProduct = {
+      title: "Yuto's Product",
+      price: '10000',
+      brand: 'Apple',
+    };
+
+    // when
+    await page.getByLabel('Title').fill(validProduct.title);
+    await page.getByLabel('Price').fill(validProduct.price);
+    await page.getByLabel('Brand').selectOption({ label: validProduct.brand });
+    await page.getByRole('button', { name: '등록하기' }).click();
+    await page.getByRole('button', { name: '확인' }).click();
+
+    // then
+    await expect(page).toHaveURL('/products');
+  });
 });
