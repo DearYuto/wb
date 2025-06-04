@@ -1,3 +1,4 @@
+import formFields from '@/domains/product/form/fields/formFields';
 import formValidationRule from '@/domains/product/form/validations/rules/formValidationRule';
 import { test, expect } from '@playwright/test';
 
@@ -44,7 +45,9 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
   });
 
   test('Title 필드는 15자 이내로 입력해야 합니다.', async ({ page }) => {
-    const titleInput = page.getByLabel('Title');
+    const titleField = formFields.find((field) => field.name === 'title')!;
+    const titleInput = page.getByLabel(titleField.label);
+
     await titleInput.fill('유토'.repeat(20));
 
     const message = formValidationRule.title.maxLength?.message;
@@ -53,10 +56,23 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
   });
 
   test('Price는 1,000원 이상이어야 합니다.', async ({ page }) => {
-    const priceInput = page.getByLabel('Price');
+    const priceField = formFields.find((field) => field.name === 'price')!;
+    const priceInput = page.getByLabel(priceField.label);
+
     await priceInput.fill('999');
 
     const message = formValidationRule.price.min?.message;
+
+    await expect(page.getByText(message!)).toBeVisible();
+  });
+
+  test('Discount Percentage는 100 이내여야 합니다.', async ({ page }) => {
+    const discountField = formFields.find((field) => field.name === 'discountPercentage')!;
+    const discountInput = page.getByLabel(discountField.label);
+
+    await discountInput.fill('101');
+
+    const message = formValidationRule.discountPercentage.max?.message;
 
     await expect(page.getByText(message!)).toBeVisible();
   });
