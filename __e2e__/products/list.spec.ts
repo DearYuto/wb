@@ -99,4 +99,20 @@ test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스�
       await expect(element).toBeVisible();
     }
   });
+
+  test('View 방식은 리스트형 또는 그리드형으로 표시됩니다.', async ({ page }) => {
+    const listView = page.getByTestId('list');
+    const gridView = page.getByTestId('grid');
+
+    await Promise.race([
+      listView.waitFor({ state: 'visible' }),
+      gridView.waitFor({ state: 'visible' }),
+    ]);
+
+    const isListView = await listView.isVisible();
+    const isGridView = await gridView.isVisible();
+
+    expect(isListView || isGridView).toBeTruthy();
+    expect(isListView && isGridView).toBeFalsy();
+  });
 });

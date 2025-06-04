@@ -31,7 +31,7 @@ const ProductListContainer = ({ viewType }: ProductListContainerProps) => {
   const ViewLayout = viewType === 'grid' ? ProductGridView : ProductListView;
 
   return (
-    <section>
+    <section data-testid={viewType}>
       <ViewLayout>
         {productDatas?.pages.flatMap((datas) => {
           return datas.products.map((product) => (
