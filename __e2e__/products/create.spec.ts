@@ -31,4 +31,14 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
       }
     }
   });
+
+  test('Brand select에는 Apple, Samsung, Weebur 옵션이 존재합니다.', async ({ page }) => {
+    const brandSelect = page.getByLabel('Brand');
+    const options = ['Apple', 'Samsung', 'Weebur'];
+
+    for (const option of options) {
+      await brandSelect.selectOption({ label: option });
+      await expect(brandSelect).toHaveValue(option.toLowerCase());
+    }
+  });
 });
