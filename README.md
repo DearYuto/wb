@@ -1,6 +1,21 @@
-#### [프로덕션 배포 페이지 바로가기 (link)](products-jiko4pkos-yutos-projects-82185171.vercel.app)
+#### [프로덕션 배포 페이지 바로가기 (link)](https://products-gold-kappa.vercel.app/products)
 
 > ### Preview
+
+페이지 초기 진입 시 view type이 50% 랜덤 확률로 grid 또는 list로 결정됩니다.
+
+정해진 view type은 최초 접속 시간으로부터 24시간이 지난 후에 만료됩니다.
+(24시간 이전에 view type을 다시 발급받으려면 쿠키에 저장되어 있는 viewType을 제거하면 됩니다.)
+
+**grid view (1줄 당 4개 아이템 배치)**
+
+![Image](https://github.com/user-attachments/assets/aaddf94a-7cb5-4af0-9626-4a3135c16eaa)
+
+**list view (1줄 당 1개 아이템 배치)**
+
+![Image](https://github.com/user-attachments/assets/32ec0015-b311-40e8-88f5-ae7a4c6709bd)
+
+---
 
 > ### 프로젝트 실행 방법
 
