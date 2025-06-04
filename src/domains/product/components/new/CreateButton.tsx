@@ -5,9 +5,11 @@ import Link from 'next/link';
 
 const CreateButton = () => {
   return (
-    <Button variant="link" fullWidth={false}>
-      <Link href="/products/new">상품 등록</Link>
-    </Button>
+    <Link href="/products/new">
+      <Button variant="link" fullWidth={false}>
+        상품 등록
+      </Button>
+    </Link>
   );
 };
 
