@@ -15,6 +15,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     >
       <figure className="overflow-hidden rounded">
         <Image
+          data-testid="product-thumbnail"
           width={200}
           height={200}
           src={product.thumbnail}
@@ -24,12 +25,20 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </figure>
 
       <header>
-        <h2 className="mt-2 text-lg font-bold text-gray-700">{product.title}</h2>
+        <h2 data-testid="product-title" className="mt-2 text-lg font-bold text-gray-700">
+          {product.title}
+        </h2>
       </header>
-      <p className="mt-1 line-clamp-3 text-sm text-gray-600">{product.description}</p>
+      <p data-testid="product-description" className="mt-1 line-clamp-3 text-sm text-gray-600">
+        {product.description}
+      </p>
       <footer className="mt-2 py-1 text-sm text-gray-400">
-        <span className="font-semibold text-yellow-500">⭐ {product.rating}</span>
-        <span className="ml-1 text-gray-400">(리뷰 {product.reviews.length})</span>
+        <span data-testid="product-rating" className="font-semibold text-yellow-500">
+          ⭐ {product.rating}
+        </span>
+        <span data-testid="product-reviews" className="ml-1 text-gray-400">
+          (리뷰 {product.reviews.length})
+        </span>
       </footer>
     </article>
   );

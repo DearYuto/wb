@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const PRODUCT_LIST_PAGE_ENDPOINT = '/products';
 const API_ENDPOINT = '**/api/products/**';
+const MOCK_API_URL = 'https://dummyjson.com/products?limit=20';
 
 test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스트를 시작합니다.`, () => {
   test.beforeEach(async ({ page }) => {
@@ -77,5 +78,25 @@ test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스�
 
     // then
     await expect(productCards).toHaveCount(expectedItemCount);
+  });
+
+  test('각 상품 카드는 필수 정보를 포함합니다.', async ({ page }) => {
+    // given
+    const requiredInfo = [
+      { selector: '[data-testid="product-title"]', label: '상품명' },
+      { selector: '[data-testid="product-description"]', label: '상품설명' },
+      { selector: '[data-testid="product-thumbnail"]', label: '썸네일 이미지' },
+      { selector: '[data-testid="product-rating"]', label: '별점' },
+      { selector: '[data-testid="product-reviews"]', label: '리뷰 수' },
+    ];
+
+    // when
+    const firstProductCard = page.getByTestId('product-card').first();
+
+    // then
+    for (const info of requiredInfo) {
+      const element = firstProductCard.locator(info.selector);
+      await expect(element).toBeVisible();
+    }
   });
 });
