@@ -76,4 +76,16 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
 
     await expect(page.getByText(message!)).toBeVisible();
   });
+
+  test('최종 가격이 실시간으로 계산되어 표시됩니다.', async ({ page }) => {
+    const priceInput = page.getByLabel('Price');
+    const discountInput = page.getByLabel('Discount Percentage');
+
+    await priceInput.fill('10000');
+    await discountInput.fill('20');
+
+    const finalPrice = page.getByText('8,000');
+
+    await expect(finalPrice).toBeVisible();
+  });
 });
