@@ -8,26 +8,27 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
   });
 
   test('상품 생성 페이지가 정상적으로 렌더링됩니다.', async ({ page }) => {
-    const ENDPOINT = '/products/new';
-
-    await page.goto(ENDPOINT);
-
-    await expect(page).toHaveURL(ENDPOINT);
+    await expect(page).toHaveURL(PRODUCT_CREATE_PAGE_ENDPOINT);
   });
 
   test('상품 생성 페이지에 폼 필드가 모두 렌더링됩니다.', async ({ page }) => {
     const fields = [
-      { label: 'Title' },
-      { label: 'Description' },
-      { label: 'Price' },
-      { label: 'Discount Percentage' },
-      { label: 'Brand' },
+      { label: 'Title', type: 'text' },
+      { label: 'Description', type: 'textarea' },
+      { label: 'Price', type: 'number' },
+      { label: 'Discount Percentage', type: 'number' },
+      { label: 'Brand', type: 'select' },
     ];
 
-    for (const { label } of fields) {
-      const input = page.getByLabel(label);
+    for (const field of fields) {
+      const locator = page.getByLabel(field.label);
+      await expect(locator).toBeVisible();
 
-      await expect(input).toBeVisible();
+      if (field.type === 'textarea' || field.type === 'select') {
+        await expect(locator).toHaveJSProperty('tagName', field.type.toUpperCase());
+      } else {
+        await expect(locator).toHaveAttribute('type', field.type);
+      }
     }
   });
 });
