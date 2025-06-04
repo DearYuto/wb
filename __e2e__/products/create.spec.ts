@@ -1,3 +1,4 @@
+import formValidationRule from '@/domains/product/form/validations/rules/formValidationRule';
 import { test, expect } from '@playwright/test';
 
 const PRODUCT_CREATE_PAGE_ENDPOINT = '/products/new';
@@ -40,5 +41,14 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
       await brandSelect.selectOption({ label: option });
       await expect(brandSelect).toHaveValue(option.toLowerCase());
     }
+  });
+
+  test('Title 필드는 15자 이내로 입력해야 합니다.', async ({ page }) => {
+    const titleInput = page.getByLabel('Title');
+    await titleInput.fill('유토'.repeat(20));
+
+    const message = formValidationRule.title.maxLength?.message;
+
+    await expect(page.getByText(message!)).toBeVisible();
   });
 });
