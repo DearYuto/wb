@@ -134,4 +134,20 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
     // then
     await expect(page).toHaveURL('/products');
   });
+
+  test('필수 필드가 비어있는 경우 버튼이 비활성화됩니다.', async ({ page }) => {
+    // given
+    const invalidProduct = {
+      title: "Yuto's Product",
+      price: '',
+    };
+
+    // when
+    await page.getByLabel('Title').fill(invalidProduct.title);
+    await page.getByLabel('Price').fill(invalidProduct.price);
+
+    // then
+    const submitButton = page.getByRole('button', { name: '등록하기' });
+    await expect(submitButton).toBeDisabled();
+  });
 });
