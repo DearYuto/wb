@@ -51,4 +51,13 @@ test.describe(`${PRODUCT_CREATE_PAGE_ENDPOINT}상품 생성 페이지 테스트�
 
     await expect(page.getByText(message!)).toBeVisible();
   });
+
+  test('Price는 1,000원 이상이어야 합니다.', async ({ page }) => {
+    const priceInput = page.getByLabel('Price');
+    await priceInput.fill('999');
+
+    const message = formValidationRule.price.min?.message;
+
+    await expect(page.getByText(message!)).toBeVisible();
+  });
 });

@@ -37,7 +37,7 @@ test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스�
     context,
   }) => {
     await context.route(API_ENDPOINT, async (route) => {
-      await new Promise((res) => setTimeout(res, 600));
+      await new Promise((res) => setTimeout(res, 1000));
       await route.continue();
     });
 
