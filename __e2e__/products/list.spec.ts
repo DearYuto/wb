@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 
 const PRODUCT_LIST_PAGE_ENDPOINT = '/products';
 const API_ENDPOINT = '**/api/products/**';
-const MOCK_API_URL = 'https://dummyjson.com/products?limit=20';
 
 test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스트를 시작합니다.`, () => {
   test.beforeEach(async ({ page }) => {
@@ -130,5 +129,21 @@ test.describe(`${PRODUCT_LIST_PAGE_ENDPOINT} 상품 리스트 페이지 테스�
     const expiresInHours = expiresInMs / (60 * 60 * 1000);
 
     expect(expiresInHours).toBeLessThanOrEqual(24);
+  });
+
+  test('리스트 페이지 상단에 상품 생성 페이지로 이동하는 버튼이 존재하고 클릭 시 상품 등록 페이지로 이동한다.', async ({
+    page,
+  }) => {
+    // given
+    await page.goto('/products');
+
+    // when
+    const createButton = page.getByRole('link', { name: /상품 등록|새 상품|create/i });
+
+    // then
+    await expect(createButton).toBeVisible();
+
+    await createButton.click();
+    await expect(page).toHaveURL('/products/new');
   });
 });
